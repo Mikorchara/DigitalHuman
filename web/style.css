@@ -1,0 +1,374 @@
+/* ============================================================
+   Win7 怀旧风格 — 灰蓝 · 立体 · Aero Glass
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    font-size: 13px;
+    color: #1e293b;
+    overflow: hidden;
+}
+
+/* ── Win7 桌面背景 ─────────────────────────────────────── */
+body {
+    display: flex;
+    /* 底色与 QWebEnginePage.setBackgroundColor 保持一致，消除合成闪白 */
+    background-color: #c8d8e8;
+    background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(100,149,237,0.3), transparent 50%),
+        radial-gradient(ellipse at 80% 40%, rgba(70,130,180,0.15), transparent 50%),
+        linear-gradient(180deg, #d6e4f0 0%, #c4d8ec 30%, #b8cee4 60%, #a8c0d8 100%);
+}
+
+/* ==================== 左侧：聊天面板 ==================== */
+#chat-panel {
+    flex: 0 0 56%;
+    display: flex; flex-direction: column;
+    margin: 8px 4px 8px 8px;
+    background: linear-gradient(180deg, #f2f6fc 0%, #e8eef7 100%);
+    border-radius: 6px;
+    /* Win7 立体边框：左上亮，右下暗 */
+    border-top:    1px solid #fcfdfe;
+    border-left:   1px solid #fcfdfe;
+    border-right:  1px solid #8ba5c4;
+    border-bottom: 1px solid #8ba5c4;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.6),
+        0 2px 6px rgba(60,80,110,0.25);
+}
+
+/* ── 标题栏 ── */
+#chat-header {
+    padding: 10px 16px;
+    font-size: 13px; font-weight: 600;
+    background: linear-gradient(180deg, #e8f0fa 0%, #d4e2f2 40%, #c4d6ea 100%);
+    color: #1e3a5f;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #9ab2d4;
+    border-radius: 5px 5px 0 0;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+    display: flex; align-items: center; gap: 8px;
+}
+#chat-header::before {
+    content: "";
+    display: inline-block;
+    width: 16px; height: 16px;
+    background: linear-gradient(135deg, #5b8fc7, #3b6ba5);
+    border-radius: 2px;
+    border: 1px solid #2d5a8e;
+}
+#tts-btn {
+    margin-left: auto;
+    background: none; border: none;
+    font-size: 14px; cursor: pointer;
+    padding: 2px 6px; border-radius: 3px;
+    opacity: 0.4;
+}
+#tts-btn:hover { background: rgba(0,0,0,0.08); }
+#ctx-btn {
+    margin-left: auto; margin-right: 2px;
+    background: none; border: none;
+    font-size: 14px; cursor: pointer;
+    padding: 2px 6px; border-radius: 3px;
+    opacity: 0.5;
+}
+#ctx-btn:hover { background: rgba(0,0,0,0.08); opacity: 0.8; }
+
+/* ── 上下文面板 ── */
+#context-panel {
+    flex: 0 0 56%;
+    display: flex; flex-direction: column;
+    margin: 8px 4px 8px 8px;
+    background: linear-gradient(180deg, #f2f6fc 0%, #e8eef7 100%);
+    border-radius: 6px;
+    border-top: 1px solid #fcfdfe; border-left: 1px solid #fcfdfe;
+    border-right: 1px solid #8ba5c4; border-bottom: 1px solid #8ba5c4;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 6px rgba(60,80,110,0.25);
+}
+#context-header {
+    padding: 10px 16px; font-size: 13px; font-weight: 600;
+    background: linear-gradient(180deg, #e8f0fa 0%, #d4e2f2 40%, #c4d6ea 100%);
+    color: #1e3a5f; display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid #9ab2d4; border-radius: 5px 5px 0 0;
+    flex-shrink: 0;
+}
+#ctx-close-btn {
+    margin-left: auto; background: none; border: none;
+    font-size: 14px; cursor: pointer; color: #555;
+    padding: 2px 6px; border-radius: 3px;
+}
+#ctx-close-btn:hover { background: rgba(0,0,0,0.08); }
+#context-list {
+    flex: 1; overflow-y: auto; padding: 12px 16px;
+    display: flex; flex-direction: column; gap: 8px;
+}
+.ctx-msg {
+    padding: 8px 12px; border-radius: 4px; font-size: 12px;
+    line-height: 1.5; word-break: break-word;
+}
+.ctx-user { background: #e3edf9; border-left: 3px solid #5b8fc7; }
+.ctx-assistant { background: #f0f4e8; border-left: 3px solid #7ba87d; }
+.ctx-empty { text-align: center; color: #999; padding: 40px 0; }
+#context-actions {
+    display: flex; gap: 8px; padding: 10px 16px;
+    border-top: 1px solid #d0d8e4; flex-shrink: 0;
+}
+#ctx-undo-btn, #ctx-clear-btn {
+    flex: 1; padding: 8px; border-radius: 4px;
+    border: 1px solid #9ab2d4; cursor: pointer;
+    font-size: 12px; font-family: inherit;
+    background: linear-gradient(180deg, #f5f8fc, #e0e8f2);
+}
+#ctx-undo-btn:hover, #ctx-clear-btn:hover { background: #dce6f2; }
+#ctx-clear-btn { border-color: #d4a0a0; color: #8b3a3a; }
+#ctx-clear-btn:hover { background: #f5e8e8; }
+
+/* ── 人设按钮 ── */
+#persona-btn {
+    background: none; border: none;
+    font-size: 14px; cursor: pointer;
+    padding: 2px 6px; border-radius: 3px;
+    opacity: 0.5;
+}
+#persona-btn:hover { background: rgba(0,0,0,0.08); opacity: 0.8; }
+
+/* ── 人设编辑面板 ── */
+#persona-panel {
+    flex: 0 0 56%;
+    display: flex; flex-direction: column;
+    margin: 8px 4px 8px 8px;
+    background: linear-gradient(180deg, #f2f6fc 0%, #e8eef7 100%);
+    border-radius: 6px;
+    border-top: 1px solid #fcfdfe; border-left: 1px solid #fcfdfe;
+    border-right: 1px solid #8ba5c4; border-bottom: 1px solid #8ba5c4;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 6px rgba(60,80,110,0.25);
+}
+#persona-header {
+    padding: 10px 16px; font-size: 13px; font-weight: 600;
+    background: linear-gradient(180deg, #e8f0fa 0%, #d4e2f2 40%, #c4d6ea 100%);
+    color: #1e3a5f; display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid #9ab2d4; border-radius: 5px 5px 0 0;
+    flex-shrink: 0;
+}
+#persona-close-btn {
+    margin-left: auto; background: none; border: none;
+    font-size: 14px; cursor: pointer; color: #555;
+    padding: 2px 6px; border-radius: 3px;
+}
+#persona-editor {
+    flex: 1; padding: 12px 16px;
+    font-size: 13px; font-family: "Microsoft YaHei", sans-serif;
+    border: none; resize: none; outline: none;
+    background: #f9fbfd; color: #333;
+    line-height: 1.6;
+}
+#persona-actions {
+    display: flex; gap: 8px; padding: 10px 16px;
+    border-top: 1px solid #d0d8e4; flex-shrink: 0;
+}
+#persona-save-btn, #persona-reset-btn {
+    flex: 1; padding: 8px; border-radius: 4px;
+    border: 1px solid #9ab2d4; cursor: pointer;
+    font-size: 12px; font-family: inherit;
+    background: linear-gradient(180deg, #f5f8fc, #e0e8f2);
+}
+#persona-save-btn:hover, #persona-reset-btn:hover { background: #dce6f2; }
+#persona-reset-btn { border-color: #d4a0a0; color: #8b3a3a; }
+#persona-reset-btn:hover { background: #f5e8e8; }
+
+/* ── 文件输入 ── */
+#attach-btn {
+    background: none; border: none;
+    font-size: 16px; cursor: pointer;
+    padding: 2px 6px; border-radius: 3px;
+    opacity: 0.5;
+}
+#attach-btn:hover { background: rgba(0,0,0,0.08); opacity: 0.8; }
+#file-input-row {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-top: 1px solid #d0d8e4;
+    background: #f0f4f8; flex-shrink: 0;
+}
+#file-path {
+    flex: 1; padding: 6px 10px;
+    font-size: 12px; font-family: "Microsoft YaHei", sans-serif;
+    border: 1px solid #b0c4d8; border-radius: 3px;
+    outline: none; background: #fff;
+}
+#file-path:focus { border-color: #5b8fc7; }
+#file-confirm-btn {
+    padding: 4px 14px; font-size: 12px; font-family: inherit;
+    border: 1px solid #9ab2d4; border-radius: 3px;
+    background: linear-gradient(180deg, #f5f8fc, #e0e8f2);
+    cursor: pointer; white-space: nowrap;
+}
+#file-confirm-btn:hover { background: #dce6f2; }
+#file-status { font-size: 11px; color: #666; margin-left: 4px; white-space: nowrap; }
+
+/* ── 参考资料编辑区 ── */
+#context-ref-section {
+    border-top: 1px solid #d0d8e4; flex-shrink: 0;
+}
+#context-ref-header {
+    padding: 6px 16px; font-size: 11px; font-weight: 600;
+    color: #1e3a5f; display: flex; align-items: center; gap: 8px;
+}
+#ctx-ref-save {
+    margin-left: auto; padding: 2px 10px;
+    font-size: 11px; font-family: inherit;
+    border: 1px solid #9ab2d4; border-radius: 3px;
+    background: linear-gradient(180deg, #f5f8fc, #e0e8f2);
+    cursor: pointer;
+}
+#ctx-ref-save:hover { background: #dce6f2; }
+#context-ref-editor {
+    width: 100%; height: 120px; padding: 8px 16px;
+    font-size: 11px; font-family: "Microsoft YaHei", sans-serif;
+    border: none; resize: none; outline: none;
+    background: #f9fbfd; color: #333;
+    line-height: 1.5;
+}
+
+/* ── 消息列表 ── */
+#chat-messages {
+    flex: 1; overflow-y: auto;
+    padding: 16px 20px;
+    display: flex; flex-direction: column; gap: 12px;
+    background: linear-gradient(180deg, #f7f9fd 0%, #eef3fa 100%);
+}
+#chat-messages::-webkit-scrollbar { width: 6px; }
+#chat-messages::-webkit-scrollbar-track { background: #dde5f0; border-radius: 3px; }
+#chat-messages::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #7fa3c8, #5c82ac);
+    border-radius: 3px;
+}
+
+/* ── 消息气泡 ── */
+.msg {
+    max-width: 78%;
+    padding: 8px 14px;
+    border-radius: 4px;
+    line-height: 1.6; font-size: 13px;
+    word-break: break-word;
+    animation: fadeInUp .2s ease;
+}
+
+/* 用户消息 (右侧) — 蓝色立体 */
+.msg.user {
+    align-self: flex-end;
+    background: linear-gradient(180deg, #7ca9de 0%, #5689c4 100%);
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    border-top:    1px solid #98c0f0;
+    border-left:   1px solid #98c0f0;
+    border-right:  1px solid #3b6ba5;
+    border-bottom: 1px solid #3b6ba5;
+    box-shadow: 0 2px 4px rgba(40,60,100,0.3);
+}
+
+/* AI 消息 (左侧) — 浅灰立体 */
+.msg.assistant {
+    align-self: flex-start;
+    background: linear-gradient(180deg, #fdfdfe 0%, #f2f5f9 100%);
+    color: #2c3e50;
+    border-top:    1px solid #fefefe;
+    border-left:   1px solid #fefefe;
+    border-right:  1px solid #b0c4d8;
+    border-bottom: 1px solid #b0c4d8;
+    box-shadow: 0 1px 3px rgba(60,80,110,0.15);
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 输入区 ── */
+#chat-input-area {
+    display: flex; padding: 10px 14px; gap: 8px;
+    background: linear-gradient(180deg, #e8eef7 0%, #dde5f0 100%);
+    border-top: 1px solid #b0c4d8;
+    flex-shrink: 0;
+    border-radius: 0 0 5px 5px;
+}
+
+/* Win7 凹陷输入框 */
+#chat-input {
+    flex: 1;
+    padding: 8px 14px;
+    border-radius: 3px;
+    background: #fff;
+    color: #1e293b; font-size: 13px;
+    outline: none;
+    border-top:    1px solid #8899aa;
+    border-left:   1px solid #8899aa;
+    border-right:  1px solid #e4eaf0;
+    border-bottom: 1px solid #e4eaf0;
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.12);
+}
+#chat-input:focus {
+    background: #fefdf8;
+    border-color: #5c82ac;
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.15), 0 0 0 2px rgba(90,130,180,0.2);
+}
+#chat-input::placeholder {
+    color: #8899aa; font-style: italic;
+}
+
+/* Win7 立体按钮 */
+#send-btn {
+    width: 38px; height: 33px;
+    border-radius: 3px;
+    color: #1e3a5f; font-size: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #f0f4f9 0%, #d8e3ef 50%, #c4d4e6 100%);
+    border-top:    1px solid #f8fafd;
+    border-left:   1px solid #f8fafd;
+    border-right:  1px solid #7a95b8;
+    border-bottom: 1px solid #7a95b8;
+    box-shadow: 0 1px 2px rgba(60,80,110,0.2);
+    transition: none;
+    display: flex; align-items: center; justify-content: center;
+}
+#send-btn:hover {
+    background: linear-gradient(180deg, #f8fbfe 0%, #e4eef7 50%, #d0ddea 100%);
+    border-right-color: #6a85a5;
+    border-bottom-color: #6a85a5;
+}
+#send-btn:active {
+    background: linear-gradient(180deg, #c8d6e4 0%, #d4e0ea 100%);
+    border-top-color: #6a85a5;
+    border-left-color: #6a85a5;
+    border-right-color: #eef4f8;
+    border-bottom-color: #eef4f8;
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.15);
+}
+
+/* ==================== 右侧：Live2D 面板 ==================== */
+#live2d-panel {
+    flex: 0 0 44%;
+    position: relative;
+    margin: 8px 8px 8px 4px;
+    border-radius: 6px;
+    overflow: hidden;
+    /* 立体边框 */
+    border-top:    1px solid #fcfdfe;
+    border-left:   1px solid #fcfdfe;
+    border-right:  1px solid #8ba5c4;
+    border-bottom: 1px solid #8ba5c4;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 2px 6px rgba(60,80,110,0.25);
+    /* ★ 透明背景：WebGL 缓冲区清空时不会露出色块 → 消除闪白 */
+    background: transparent;
+}
+
+#live2d-panel canvas { 
+    display: block;
+}
+

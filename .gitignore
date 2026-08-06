@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Live2D SDK (compile only, not needed at runtime)
+CubismSdkForWeb-5-r.5/
+
+# TTS cache
+tts_cache/
+
+# OS
+.DS_Store
+Thumbs.db

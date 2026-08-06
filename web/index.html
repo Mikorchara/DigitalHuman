@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数字人聊天</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="chat-panel">
+    <div id="chat-header">
+        数字人助手
+        <button id="persona-btn" onclick="togglePersonaPanel()" title="人设">🎭</button>
+        <button id="ctx-btn" onclick="toggleContextPanel()" title="上下文">📋</button>
+        <button id="tts-btn" onclick="toggleTTS()" title="语音: 关">🔇</button>
+    </div>
+    <div id="chat-messages">
+        <div class="msg assistant">你好！有什么可以帮你的？</div>
+    </div>
+    <div id="chat-input-area">
+        <input id="chat-input" type="text" placeholder="输入消息，按 Enter 发送..." autofocus />
+        <button id="attach-btn" onclick="toggleFileInput()" title="附加文件">📎</button>
+        <button id="send-btn" title="发送">➤</button>
+    </div>
+    <div id="file-input-row" style="display:none">
+        <input id="file-path" type="text" placeholder="输入完整文件路径，如 D:\docs\notes.txt" />
+        <button id="file-confirm-btn" onclick="loadFile()">确认</button>
+        <span id="file-status"></span>
+    </div>
+</div>
+
+<!-- 上下文管理面板（默认隐藏） -->
+<div id="context-panel" style="display:none">
+    <div id="context-header">
+        📋 对话上下文
+        <button id="ctx-close-btn" onclick="toggleContextPanel()" title="返回">✕</button>
+    </div>
+    <div id="context-list"></div>
+    <div id="context-actions">
+        <button id="ctx-undo-btn" onclick="undoRound()">↩ 回退一轮</button>
+        <button id="ctx-clear-btn" onclick="clearAllContext()">🗑 清空全部</button>
+        <button id="ctx-summarize-btn" onclick="summarizeContext()">📝 压缩</button>
+    </div>
+    <div id="context-ref-section">
+        <div id="context-ref-header">
+            📄 参考资料
+            <button id="ctx-ref-save" onclick="saveReference()">💾 保存</button>
+        </div>
+        <textarea id="context-ref-editor" placeholder="在此编辑参考资料，AI 会自动引用..."></textarea>
+    </div>
+</div>
+
+<!-- 人设编辑面板（默认隐藏） -->
+<div id="persona-panel" style="display:none">
+    <div id="persona-header">
+        🎭 人设编辑
+        <button id="persona-close-btn" onclick="togglePersonaPanel()" title="返回">✕</button>
+    </div>
+    <textarea id="persona-editor" placeholder="在此编辑 AI 人设...&#10;&#10;例如：&#10;你叫 Haru，是一个活泼可爱的桌面虚拟助手。&#10;请用简洁、自然的中文回答，像朋友聊天一样。"></textarea>
+    <div id="persona-actions">
+        <button id="persona-save-btn" onclick="savePersona()">💾 保存人设</button>
+        <button id="persona-reset-btn" onclick="resetPersona()">🔄 恢复默认</button>
+    </div>
+</div>
+
+<div id="live2d-panel"></div>
+
+<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script src="sdk_dist/Core/live2dcubismcore.min.js"></script>
+<script type="module" src="sdk_dist/assets/index-3PzXnbEU.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

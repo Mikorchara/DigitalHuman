@@ -1,0 +1,5 @@
+PySide6-Essentials>=6.5.0
+PySide6-Addons>=6.5.0
+edge-tts>=6.1.0
+pygame>=2.5.0
+openai>=1.0.0
