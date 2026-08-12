@@ -12,7 +12,7 @@ from PySide6.QtWebEngineCore import QWebEnginePage
 
 from ui.bridge import Bridge
 from ui.http_server import start_server
-from core.tts_engine import cleanup_cache, synthesize_async, get_ready, play_file
+from core.tts_engine import clear_all_cache, synthesize_async, get_ready, play_file
 import config
 
 
@@ -44,9 +44,6 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-
-        # 启动时自动清理过期 TTS 缓存（默认 >1 天的文件）
-        cleanup_cache()
 
         self.bridge = Bridge(self)
         self.webview: QWebEngineView | None = None
@@ -391,8 +388,9 @@ class MainWindow(QMainWindow):
     # ------------------------------------------------------------------
 
     def closeEvent(self, event):
-        """关闭窗口时清理 WebView"""
+        """关闭窗口时清理 WebView + 清空 TTS 临时文件"""
         if self.webview:
             self.webview.page().deleteLater()
             self.webview.deleteLater()
+        clear_all_cache()
         event.accept()

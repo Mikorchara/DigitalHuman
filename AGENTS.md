@@ -131,7 +131,8 @@ main_window.py _on_user_message()
   ├─ call_ai_async(text)                        → 后台线程 AI
   ├─ QTimer 轮询 get_ai_reply() → reply
   ├─ send_to_web("addMessage", ...)              → 显示回复
-  ├─ synthesize_async(reply)                     → 后台合成 MP3(如果开启音频播放,否则省略)
+  (如果关闭音频播放+口型同步功能,则后续步骤省略)
+  ├─ synthesize_async(reply)                     → 后台合成 MP3
   ├─ QTimer 轮询 get_ready() → (path, duration)
   ├─ play_file(path)                             → pygame 播放
   └─ send_to_web("startSpeechLipSync", ...)      → 口型同步

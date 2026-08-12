@@ -1,24 +1,5 @@
 # 代码审查问题清单 — v2
 
-
----
-
-## 🟡 新增问题（v2 引入）
-
-
-### 3. 过期注释 — `_start_lip_sync` docstring ⚠️ 已弃用，保留兼容
-
-**文件**：`ui/main_window.py:151`
-
-```python
-def _start_lip_sync(self, text: str):
-    """模拟说话口型：根据文本长度计算节奏（已弃用，保留兼容）"""
-```
-
-v3 已接入 TTS 语音合成，实际口型由 `_on_user_message` 中的 TTS 路径驱动，此方法不再被新代码调用。docstring 仍写"每 50ms 刷新"，但因已弃用，不需要同步修改。
-
----
-
 ## 🟡 v1 遗留问题
 
 ### 4. 死代码：`_resolve_web_path` 未使用 ⏭️ 有意保留

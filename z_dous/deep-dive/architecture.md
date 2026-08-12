@@ -41,7 +41,6 @@
 main.py
   → QApplication 初始化
   → MainWindow.__init__()
-    → cleanup_cache()            清理 TTS 缓存
     → _setup_ui()
       → Live2DPage               自定义 JS 诊断
       → http_server.start_server 启动 CORS HTTP 服务
@@ -49,6 +48,7 @@ main.py
     → _setup_bridge()
       → QWebChannel 注册 bridge
       → loadFinished → 诊断 JS → setAutoIdle(false)
+  → 退出: closeEvent → clear_all_cache() 清空 tts_cache
 ```
 
 ### 2. 页面加载流程
