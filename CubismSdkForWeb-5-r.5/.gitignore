@@ -1,0 +1,13 @@
+# Cubism SDK for Web 专属忽略规则
+# 只排除可重新生成的构建产物与依赖，源码和模型资源全部纳入版本管理
+
+# 依赖包（npm install 可重新生成）
+node_modules/
+
+# build 产物（npm run build 可重新生成；运行时用的编译产物在 web/sdk_dist/ 已提交）
+dist/
+
+# OS 杂项
+.DS_Store
+Thumbs.db
+*.log

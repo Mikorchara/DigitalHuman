@@ -9,9 +9,6 @@ venv/
 .vscode/
 .idea/
 
-# Live2D SDK (compile only, not needed at runtime)
-CubismSdkForWeb-5-r.5/
-
 # TTS cache
 tts_cache/
 

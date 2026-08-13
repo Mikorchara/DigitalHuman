@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "../../..",
+    "removeComments": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@framework/*": ["../../../Framework/src/*"],
+      "cubism": ["../../../Framework/src/live2dcubismframework.ts"]
+    },
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "../../../Core/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
