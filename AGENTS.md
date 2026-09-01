@@ -1,85 +1,105 @@
-# AI Instructions — Digital Human Chat (Python / PySide6)
+# AI Instructions — Digital Human Chat
 
-* 维护此数字人聊天面板项目。遵循 PEP 8。
-* **关键约束**：Live2D 渲染使用 SDK Demo dist（已验证），不要用手写渲染器。
+> 本文件是 AI 协作规范，维护此项目时请遵循。
 
 ---
 
-## 1. 修改规范
+## 1. 项目基本信息
 
-### 必须遵守
+| 项 | 内容 |
+|----|------|
+| 项目名称 | Digital Human Chat（数字人聊天面板） |
+| 创建日期 | 2026-08（自 JavaFX 版迁移，已独立开发） |
+| 主要技术栈 | Python / PySide6 / QWebEngineView / Live2D Cubism SDK 5 / DeepSeek API / edge-tts |
 
-1. **修改已有代码前，先在 `z_dous/patches/` 创建补丁记录**（见下方模板）。
-2. **修改前查阅 `z_dous/troubleshooting.md`**，避免重蹈已知坑。
+## 2. 项目目标与范围
 
-### 补丁记录模板
+- **目标**：桌面数字人聊天应用——左侧聊天面板 + 右侧 Live2D 虚拟形象，支持 AI 对话与语音合成（含口型同步）。
+- **范围**：聊天 / AI（DeepSeek）/ TTS / Live2D 控制 / 上下文管理 / 文件输入。
 
-每次修改时创建：
+## 3. 关键架构决策记录
+
+| 决策 | 原因 |
+|------|------|
+| Live2D 使用 SDK Demo dist（不手写渲染器） | 投影矩阵、mask 渲染等无法手写覆盖（核心约束） |
+| HTTP server 而非 file:// | SDK 依赖 `../../` 相对路径，file:// 下加载失败 |
+| QWebChannel 而非 WebSocket | PySide6 原生支持，零配置 |
+| AI/TTS 后台线程 + QTimer 轮询 | 避免 UI 冻结；daemon 线程不能用 QTimer |
+| TTS 临时文件"播完即删 + 退出清空" | AI 回复每次不同，缓存无意义；磁盘保持干净 |
+| 密钥不入库（config.example.py 模板） | 防密钥泄露，环境变量优先 |
+
+## 4. 环境依赖与配置说明
+
+| 依赖 | 说明 |
+|------|------|
+| PySide6 | 桌面框架（Essentials + Addons） |
+| edge-tts | 在线 TTS（Azure，需网络） |
+| pygame | 音频播放（SDL2） |
+| openai | DeepSeek API 调用 |
+
+**配置**：真实密钥放本地 `config.py`（gitignore）或用环境变量 `DEEPSEEK_API_KEY`；模板见 `config.example.py`。
+
+## 5. 协作规范与代码风格
+
+- 遵循 PEP 8；类名 PascalCase，函数/变量 snake_case
+- 资源文件路径通过 `config`/`resource` 解析，不硬编码
+- AI 模块独立于 UI，仅通过信号/回调通信
+- 修改前先查阅 `z_docs/troubleshooting.md` 与 `z_docs/code_review.md`
+- 修改已有代码前，先在 `z_docs/patches/` 创建补丁记录（见下）
+- 出现技术失误时，总结到 `z_docs/troubleshooting.md` 使经验可复用
+
+---
+
+## 6. 修改规范
+
+### 原则
+
+1. **任何对已有代码的修改，必须先备份记录。**
+2. **优先新增文件，而非改动已有文件。**
+3. **修改最小化** — 只改必要的，不动无关代码。
+
+### 修改记录流程
+
+每次修改已有文件时，按以下步骤操作：
 
 ```
-z_dous/patches/YYYY-MM-DD_简要描述/
-├── CHANGES.md              # 总览：原因、文件列表、影响范围
-├── modify_0/                # 第 1 个修改（完全重写 → 存全文）
-│   ├── before/
-│   │   └── 文件名.py.md     # 修改前全文（.md 后缀避免 IDE 报错）
-│   └── after/
-│       └── 文件名.py.md     # 修改后全文
-└── modify_1/                # 第 2 个修改（小改动 → 只存差异）
-    ├── before/
-    │   └── 文件名.py.md     # 仅改动部分 + 上下文
-    └── after/
-        └── 文件名.py.md     # 仅改动部分 + 上下文
+z_docs/patches/
+└── YYYY-MM-DD_简要描述/
+    ├── CHANGES.md          # 修改说明：改了什么、为什么改
+    ├── before/             # 修改前的原始文件副本
+    │   └── xxx.py
+    └── after/              # 修改后的文件副本
+        └── xxx.py
 ```
 
-**规则**：
-- **完全重写**（如换库、换 API）→ `before/after` 存**文件全文**
-- **小改动**（如改函数名、几行代码）→ `before/after` 只存**改动的代码段**，文件头加 `# 位置: path/to/file.py, 方法/位置` 注释
-- 每个被修改的文件一个 `modify_N/` 目录，按序编号
-- **所有 patch 文件统一用 `.md` 后缀**（如 `ai_client.py.md`），避免 IDE 对裸 `.py` 文件报语法错误
+#### CHANGES.md 模板
 
-`CHANGES.md` 格式：
 ```markdown
 # 修改日期：YYYY-MM-DD
+# 修改人：[姓名]
 
 ## 修改文件
-- `path/to/file.py` — 简述改动 ---  modify_0
-- `path/to/other.py` — 简述改动 ---  modify_1
+- `path/to/file.py`
 
 ## 修改原因
-[简述]
+[简述为什么要改]
 
 ## 修改内容
 - 改了 A
 - 加了 B
 
 ## 影响范围
-[哪些功能受影响]
+[哪些功能会受影响]
 ```
 
 ---
 
-## 2. 项目概览
+## 附录
 
-桌面数字人聊天应用：左侧聊天面板 + 右侧 Live2D 形象。
-
-| 组件 | 技术 |
-|------|------|
-| 桌面框架 | PySide6 (QWebEngineView) |
-| Web 入口 | 内建 HTTP server (CORS) |
-| JS 诊断 | Live2DPage.javaScriptConsoleMessage → Python 终端 |
-| Live2D 引擎 | Cubism SDK 5 Demo dist |
-| 模型 | Haru（唯一） |
-| AI | DeepSeek API（`core/ai_client.py`） |
-| TTS | edge-tts + pygame |
-
-详细架构见 `z_dous/deep-dive/architecture.md`。
-
----
-
-## 3. 核心命令
+### 核心命令
 
 ```powershell
-# 启动（PowerShell）
+# 启动
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned ; d:\digital_human\.venv\Scripts\Activate.ps1 ; $env:PYTHONPATH="." ; python d:\digital_human\main.py
 
 # 修改 TypeScript 后重新编译部署
@@ -90,9 +110,7 @@ cd CubismSdkForWeb-5-r.5\Samples\TypeScript\Demo; npm run build
 Get-ChildItem -Recurse __pycache__ | Remove-Item -Recurse -Force
 ```
 
----
-
-## 4. 关键文件速查
+### 关键文件速查
 
 | 文件 | 职责 |
 |------|------|
@@ -105,14 +123,11 @@ Get-ChildItem -Recurse __pycache__ | Remove-Item -Recurse -Force
 | `web/index.html` | 聊天 UI + Live2D 容器 |
 | `web/app.js` | 前端逻辑、Live2D API 桥接 |
 | `web/style.css` | Win7 Aero 主题 |
+| `config.example.py` | 配置模板（真实密钥放本地 `config.py`） |
 
----
-
-## 5. Live2D 控制 API
+### Live2D 控制 API
 
 > SDK 源码位于 `CubismSdkForWeb-5-r.5/Samples/TypeScript/Demo/src/`。
-
-### window.Live2D 方法一览
 
 | 方法 | 参数 | 说明 |
 |------|------|------|
@@ -124,31 +139,19 @@ Get-ChildItem -Recurse __pycache__ | Remove-Item -Recurse -Force
 | `stopLipSync()` | 无 | 立即闭嘴并复位 |
 | `setAutoIdle(enabled)` | 布尔 | 切换自动待机循环 |
 
-### 消息处理调用链
-
-```
-main_window.py _on_user_message()
-  ├─ call_ai_async(text)                        → 后台线程 AI
-  ├─ QTimer 轮询 get_ai_reply() → reply
-  ├─ send_to_web("addMessage", ...)              → 显示回复
-  (如果关闭音频播放+口型同步功能,则后续步骤省略)
-  ├─ synthesize_async(reply)                     → 后台合成 MP3
-  ├─ QTimer 轮询 get_ready() → (path, duration)
-  ├─ play_file(path)                             → pygame 播放
-  └─ send_to_web("startSpeechLipSync", ...)      → 口型同步
-```
-
 ### Haru 模型关键参数
 
 - 10 个 Idle 动作 + 1 个 TapBody 动作
 - 张嘴正确组合：`ParamMouthForm=-2.0` + `ParamMouthOpenY=1.0`
 - `_autoIdle=false`（默认关闭自动待机）
-- 更多模型细节见 `z_dous/deep-dive/live2d-internals.md`
+- 更多模型细节见 `z_docs/deep-dive/l2d-internals.md`
 
----
+### 详细参考
 
-## 6. 环境依赖
-
-- `edge-tts` 需网络连接（Azure TTS）
-- `pygame` 依赖 SDL2（Linux 需 `apt install libsdl2-mixer-2.0-0`）
-- `openai` 用于 DeepSeek API 调用
+- 开发路线图：`z_docs/ROADMAP.md`
+- 已知陷阱 / 常见错误：`z_docs/troubleshooting.md`
+- 代码审查清单：`z_docs/code_review.md`
+- 构建与运行：`z_docs/BUILD_RUN.md`
+- 项目结构：`z_docs/structure.md`
+- 深入讲解：`z_docs/deep-dive/`
+- PySide6 官方文档：https://doc.qt.io/qtforpython-6/

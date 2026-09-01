@@ -12,10 +12,13 @@
 # 1. 激活虚拟环境
 .\venv\Scripts\Activate.ps1
 
-# 2. 设置工作目录
+# 2. 配置密钥（首次）：复制模板并填写，或用环境变量
+#    copy config.example.py config.py ; $env:DEEPSEEK_API_KEY="sk-..."
+
+# 3. 设置工作目录
 $env:PYTHONPATH = "."
 
-# 3. 启动
+# 4. 启动
 python main.py
 ```
 
@@ -65,6 +68,7 @@ python main.py
 ```
 digital_human/
 ├── main.py              程序入口
+├── config.example.py    配置模板（真实密钥放本地 config.py）
 ├── requirements.txt     依赖清单
 ├── core/                核心逻辑
 │   ├── ai_client.py     AI 对话接口
@@ -78,8 +82,12 @@ digital_human/
 │   ├── app.js           前端逻辑
 │   ├── style.css        Win7 Aero 主题
 │   └── sdk_dist/        Live2D 编译产物
-├── z_dous/              📚 开发文档
+├── z_docs/                  开发文档
+│   ├── ROADMAP.md           路线图
 │   ├── troubleshooting.md   已知坑
+│   ├── code_review.md       代码审查
+│   ├── BUILD_RUN.md         运行指南
+│   ├── structure.md         项目结构
 │   ├── deep-dive/           深入资料
 │   └── patches/             修改记录
 └── CubismSdkForWeb-5-r.5/  Live2D SDK 源码
@@ -106,11 +114,14 @@ digital_human/
 |--------|--------|
 | 快速了解项目 | 👈 本页 |
 | 修改代码（给 AI） | [`AGENTS.md`](AGENTS.md) |
-| 遇到 bug | [`z_dous/troubleshooting.md`](z_dous/troubleshooting.md) |
-| 了解架构细节 | [`z_dous/deep-dive/architecture.md`](z_dous/deep-dive/architecture.md) |
-| 了解 Live2D 内部 | [`z_dous/deep-dive/live2d-internals.md`](z_dous/deep-dive/live2d-internals.md) |
-| 接入新 AI | [`z_dous/ai_interface_guide.md`](z_dous/ai_interface_guide.md) |
-| 功能演进历史 | [`z_dous/日志.md`](z_dous/日志.md) |
+| 开发路线图 | [`z_docs/ROADMAP.md`](z_docs/ROADMAP.md) |
+| 遇到 bug | [`z_docs/troubleshooting.md`](z_docs/troubleshooting.md) |
+| 运行指南 | [`z_docs/BUILD_RUN.md`](z_docs/BUILD_RUN.md) |
+| 项目结构 | [`z_docs/structure.md`](z_docs/structure.md) |
+| 了解架构细节 | [`z_docs/deep-dive/architecture.md`](z_docs/deep-dive/architecture.md) |
+| 了解 Live2D 内部 | [`z_docs/deep-dive/l2d-internals.md`](z_docs/deep-dive/l2d-internals.md) |
+| 接入新 AI | [`z_docs/deep-dive/ai_interface_guide.md`](z_docs/deep-dive/ai_interface_guide.md) |
+| 功能演进历史 | [`z_docs/deep-dive/日志.md`](z_docs/deep-dive/日志.md) |
 
 ---
 

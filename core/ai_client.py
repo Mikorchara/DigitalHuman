@@ -255,7 +255,7 @@ def call_ai(user_message: str) -> str:
         msg = str(e)
 
         if "api_key" in msg.lower() or "authentication" in msg.lower():
-            return "[错误] API Key 无效，请检查 config.py"
+            return "[错误] API Key 无效，请检查 config.py 或设置环境变量 DEEPSEEK_API_KEY"
         if "timeout" in msg.lower():
             return "[错误] AI 服务响应超时，请稍后重试"
         if "connection" in msg.lower():

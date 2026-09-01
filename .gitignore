@@ -9,6 +9,9 @@ venv/
 .vscode/
 .idea/
 
+# 密钥配置（真实密钥不入库，模板见 config.example.py）
+config.py
+
 # TTS cache
 tts_cache/
 
